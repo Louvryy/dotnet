@@ -3,7 +3,7 @@
 # Louvryy
 
 ## Description
-This repository contains the source code for the Louvryy library, an efficient image manager for .NET Core projects.
+This repository contains the source code for the Louvryy library, an efficient file manager for .NET Core projects.
 
 ## Contribution
 We welcome contributions! If you find issues, have suggestions, or want to contribute in any way, feel free to open an issue or submit a pull request.
