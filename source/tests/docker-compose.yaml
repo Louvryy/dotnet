@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  database:
+    build: ./docker/sqlserver
+    volumes:
+      - dbdata:/var/opt/mssql
+    restart: always
+    ports:
+      - "1433:1433"
+    environment:
+      - SA_PASSWORD=Secre135790T
+      - ACCEPT_EULA=Y
+    networks:
+      - database
+
+volumes:
+  dbdata:
+
+networks:
+  database:
+    driver: bridge
