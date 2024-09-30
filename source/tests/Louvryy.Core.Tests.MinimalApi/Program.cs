@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Louvryy.Core.Migrations;
 using Louvryy.Core.Api;
 using Louvryy.Core.Tests.MinimalApi.Configurations;
+using Louvryy.Core.Tests.Fixtures.DbContextFixture;
 
 namespace Louvryy.Core.Tests.MinimalApi;
 
@@ -29,8 +30,12 @@ public class Program
         builder.Services.AddLogging(builder => builder.AddConsole());
         builder.Services.ConfigureSwagger(Assembly.GetExecutingAssembly().GetName().Name);
         builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddDbContext<TestDbContext>();
 
-        builder.Services.ConfigureLouvryy();
+        builder.Services.ConfigureLouvryy(cfg => {
+            cfg.ConfigureData<TestDbContext>();
+        });
+
         builder.Services.ConfigureAuthentication();
 
         var app = builder.Build();
