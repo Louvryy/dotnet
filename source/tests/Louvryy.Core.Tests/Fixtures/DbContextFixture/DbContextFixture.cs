@@ -12,6 +12,7 @@ public class DbContextFixture : IDisposable
         DbContext = testDbContext;
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "EF1002:Risk of vulnerability to SQL injection.", Justification = "<Pending>")]
     public async Task TruncateTable<TEntity>() where TEntity : class
     {
         var tableName = DbContext.Set<TEntity>().EntityType.GetTableName();
