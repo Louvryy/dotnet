@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Louvryy.Core.Domain.UseCases;
 using Louvryy.Core.Tests.MinimalApi.FormRequests;
 using Louvryy.Core.Tests.MinimalApi.Responses;
+using Louvryy.Core.Domain.Interfaces;
 
 namespace Louvryy.Api.Web.Controllers;
 
@@ -24,7 +25,8 @@ public class AssetsController : Controller {
     public async Task<JsonResponse<PaginationResponse<AssetResponse>>> Index(
         [FromQuery] IndexAssetsFormRequest query,
         [FromServices] IMapper mapper,
-        [FromServices] GetPaginatedOriginalAssetsUseCase useCase
+        [FromServices] GetPaginatedOriginalAssetsUseCase useCase,
+        [FromServices] IFileGateway fileGateway
     ) {
 
         var result = await useCase.Execute(new GetPaginatedOriginalAssetsUseCaseInput {
@@ -33,8 +35,15 @@ public class AssetsController : Controller {
             OrderByCrescent = query.OrderByCrescent,
         });
 
+        var mappedData = mapper.Map<PaginationResponse<AssetResponse>>(result);
+
+        foreach (var asset in mappedData.Items)
+        {
+            asset.Url = fileGateway.MakeUrl(asset.Name);
+        }
+
         return new JsonResponse<PaginationResponse<AssetResponse>>() {
-            Data = mapper.Map<PaginationResponse<AssetResponse>>(result)
+            Data = mappedData
         };
     }
 }

@@ -10,6 +10,10 @@ public class SiteProfile : Profile {
 
         CreateMap(typeof(PaginationDTO<>), typeof(PaginationResponse<>));
 
-        CreateMap<AssetDTO, AssetResponse>(MemberList.Destination);
+        CreateMap<AssetDTO, AssetResponse>(MemberList.Destination)
+            .ForMember(
+                dest => dest.Url,
+                cfg => cfg.Ignore()
+            );
     }
 }

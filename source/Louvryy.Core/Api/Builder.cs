@@ -1,7 +1,9 @@
 using AutoMapper;
 using Louvryy.Core.Data.Repositories;
+using Louvryy.Core.Domain.Interfaces;
 using Louvryy.Core.Domain.Interfaces.Repositories;
 using Louvryy.Core.Domain.UseCases;
+using Louvryy.Core.Infrastructure.Gateways;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,9 +23,21 @@ public static class LouvryyBuilder
             ConfigureData(services, options.DbContextType);
 
         ConfigureDomain(services);
+        ConfigureLocalFileGateway(services);
         ConfigureMapper(services, "Louvryy.Core");
 
         return services;
+    }
+
+    private static void ConfigureLocalFileGateway(IServiceCollection services)
+    {
+        services
+            .AddOptions<LocalFileGatewayConfiguration>()
+            .ValidateDataAnnotations()
+            .ValidateOnStart()
+            .BindConfiguration("Louvryy:Local");
+
+        services.AddSingleton<IFileGateway, LocalFileGateway>();
     }
 
     private static void ConfigureDomain(IServiceCollection services)
