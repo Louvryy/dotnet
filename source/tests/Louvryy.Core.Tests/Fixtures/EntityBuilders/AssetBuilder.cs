@@ -64,7 +64,7 @@ public class AssetBuilder
             Id = _faker.Random.Guid(),
             Title = _faker.Lorem.Word(),
             CreatedAt = _faker.Date.Past(),
-            Name = _faker.System.FileName(".webp")
+            Name = _faker.System.FileName("webp")
         };
     }
 }
