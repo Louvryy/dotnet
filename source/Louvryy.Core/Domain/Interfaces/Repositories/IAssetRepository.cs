@@ -1,5 +1,5 @@
-using Louvryy.Core.DTOs;
 using Louvryy.Core.Data.Models;
+using Louvryy.Core.Data.Utils;
 
 namespace Louvryy.Core.Domain.Interfaces.Repositories;
 
@@ -13,7 +13,7 @@ public interface IAssetRepository
     /// <param name="search"></param>
     /// <param name="orderByCrescent"></param>
     /// <returns></returns>
-    PaginationDTO<Asset> PaginateOriginals(
+    Pagination<Asset> PaginateOriginals(
         int perPage,
         int page,
         string? search = null,

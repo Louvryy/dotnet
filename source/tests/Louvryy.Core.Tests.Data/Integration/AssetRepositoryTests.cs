@@ -1,4 +1,4 @@
-using Louvryy.Core.DTOs;
+using Louvryy.Core.Data.Utils;
 using Louvryy.Core.Data.Models;
 using Louvryy.Core.Data.Repositories;
 using Louvryy.Core.Tests.Data.Fixtures;
@@ -24,7 +24,7 @@ public class AssetRepositoryTests
     #region Paginate originals
 
     [Fact(DisplayName = "Paginate only original assets")]
-    public async Task PaginateOriginals_When_Called_Returns_PaginationDto_With_Only_Original_Assets()
+    public async Task PaginateOriginals_When_Called_Returns_Pagination_With_Only_Original_Assets()
     {
         // Arrange
         await SetupData();
@@ -36,14 +36,14 @@ public class AssetRepositoryTests
         var result = Repository.PaginateOriginals(perPage, page);
 
         // Assert
-        Assert.IsAssignableFrom<PaginationDTO<Asset>>(result);
+        Assert.IsAssignableFrom<Pagination<Asset>>(result);
         Assert.Equal(perPage, result.Items.Count());
         Assert.Equal(AssetesCount, result.Total);
         Assert.Equal(page, result.Page);
     }
 
     [Fact(DisplayName = "Paginate only original assets by search terms")]
-    public async Task PaginateOriginals_When_Called_With_Search_Returns_PaginationDto_With_Only_Original_Assets()
+    public async Task PaginateOriginals_When_Called_With_Search_Returns_Pagination_With_Only_Original_Assets()
     {
         // Arrange
         await SetupData();
@@ -57,7 +57,7 @@ public class AssetRepositoryTests
         var result = Repository.PaginateOriginals(perPage, page, firstItem.Name);
 
         // Assert
-        Assert.IsAssignableFrom<PaginationDTO<Asset>>(result);
+        Assert.IsAssignableFrom<Pagination<Asset>>(result);
         Assert.Equal(firstItem.Id, result.Items.First().Id);
         Assert.Single(result.Items);
     }
@@ -65,7 +65,7 @@ public class AssetRepositoryTests
     [Theory(DisplayName = "Paginate only original assets by order criteria")]
     [InlineData(false)]
     [InlineData(true)]
-    public async void PaginateOriginals_When_Called_With_OrderBy_Returns_PaginationDto_With_Only_Original_Assets(bool orderByCrescent)
+    public async void PaginateOriginals_When_Called_With_OrderBy_Returns_Pagination_With_Only_Original_Assets(bool orderByCrescent)
     {
         // Arrange
         await SetupData();
@@ -79,7 +79,7 @@ public class AssetRepositoryTests
         var result = Repository.PaginateOriginals(perPage, page, orderByCrescent: orderByCrescent);
 
         // Assert
-        Assert.IsAssignableFrom<PaginationDTO<Asset>>(result);
+        Assert.IsAssignableFrom<Pagination<Asset>>(result);
 
         var itensAsArray = result.Items.ToArray();
 

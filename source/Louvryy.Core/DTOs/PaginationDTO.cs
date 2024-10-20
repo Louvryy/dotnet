@@ -1,6 +1,6 @@
 namespace Louvryy.Core.DTOs;
 
-public class PaginationDTO<TObject> {
+public record PaginationDTO<TObject> {
     public int Page { get; set; }
     public int PageSize { get; set; }
     public int Total { get; set; }

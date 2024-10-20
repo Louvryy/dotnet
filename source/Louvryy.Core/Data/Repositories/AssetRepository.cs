@@ -23,7 +23,7 @@ public class AssetRepository<TDbContext>(
     /// <param name="search"></param>
     /// <param name="orderByCrescent"></param>
     /// <returns></returns>
-    public PaginationDTO<Asset> PaginateOriginals(
+    public Pagination<Asset> PaginateOriginals(
         int perPage,
         int page,
         string? search = null,
@@ -55,14 +55,6 @@ public class AssetRepository<TDbContext>(
             query = query.OrderByDescending(a => a.CreatedAt);
         }
 
-        var result = new Pagination<Asset>(query, page, perPage);
-
-        return new() {
-            LastPage = result.LastPage,
-            PageSize = result.PageSize,
-            Total = result.Total,
-            Items = result.Items,
-            Page = result.Page,
-        };
+        return new Pagination<Asset>(query, page, perPage);
     }
 }

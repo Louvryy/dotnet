@@ -53,4 +53,12 @@ public class Pagination<T>
             .Take(_PageSize)
             .ToArray();
     }
+
+    public Pagination(int page, int pageSize, int total, IEnumerable<T> items)
+    {
+        _Items = items;
+        _Page = page;
+        _PageSize = pageSize;
+        _Total = total;
+    }
 }
