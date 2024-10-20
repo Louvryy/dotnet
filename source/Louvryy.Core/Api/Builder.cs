@@ -1,5 +1,7 @@
+using AutoMapper;
 using Louvryy.Core.Data.Repositories;
 using Louvryy.Core.Domain.Interfaces.Repositories;
+using Louvryy.Core.Domain.UseCases;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,7 +20,16 @@ public static class LouvryyBuilder
         if (options.DbContextType is not null)
             ConfigureData(services, options.DbContextType);
 
+        ConfigureDomain(services);
+        ConfigureMapper(services, "Louvryy.Core");
+
         return services;
+    }
+
+    private static void ConfigureDomain(IServiceCollection services)
+    {
+        // UseCases
+        services.AddTransient<GetPaginatedOriginalAssetsUseCase>();
     }
 
     private static void ConfigureData(IServiceCollection services, Type dbContextType)
@@ -30,6 +41,18 @@ public static class LouvryyBuilder
     {
         var closedImplementationType = repositoryImplementation.MakeGenericType(dbContextType);
         services.AddTransient(repositoryInterface, closedImplementationType);
+    }
+
+    private static void ConfigureMapper(this IServiceCollection services, params string[] assemblyNames)
+    {
+        var configuration = new MapperConfiguration(cfg =>
+        {
+            cfg.AddMaps(assemblyNames);
+        });
+
+        configuration.AssertConfigurationIsValid();
+
+        services.AddKeyedSingleton("LouvryyMapper", configuration.CreateMapper());
     }
 }
 

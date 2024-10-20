@@ -3,6 +3,7 @@ using Louvryy.Core.DTOs;
 using Louvryy.Core.Domain.DTOs;
 using Louvryy.Core.Domain.Interfaces.Core;
 using Louvryy.Core.Domain.Interfaces.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Louvryy.Core.Domain.UseCases;
 
@@ -14,7 +15,7 @@ public record GetPaginatedOriginalAssetsUseCaseInput
 }
 
 public class GetPaginatedOriginalAssetsUseCase(
-    IMapper mapper,
+    [FromKeyedServices("LouvryyMapper")] IMapper mapper,
     IAssetRepository assetRepository
     ) : IUseCase<GetPaginatedOriginalAssetsUseCaseInput, PaginationDTO<AssetDTO>>
 {
