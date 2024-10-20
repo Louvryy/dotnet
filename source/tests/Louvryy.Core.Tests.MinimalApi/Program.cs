@@ -4,6 +4,8 @@ using Louvryy.Core.Migrations;
 using Louvryy.Core.Api;
 using Louvryy.Core.Tests.MinimalApi.Configurations;
 using Louvryy.Core.Tests.Fixtures.DbContextFixture;
+using AutoMapper;
+using Louvryy.Core.Tests.MinimalApi.Seeders;
 
 namespace Louvryy.Core.Tests.MinimalApi;
 
@@ -36,6 +38,8 @@ public class Program
             cfg.ConfigureData<TestDbContext>();
         });
 
+        ConfigureMapper(builder.Services, "Louvryy.Core.Tests.MinimalApi");
+
         builder.Services.ConfigureAuthentication();
 
         var app = builder.Build();
@@ -45,11 +49,30 @@ public class Program
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+
+            Migrator.RunUpdate(app.Configuration.GetConnectionString("TestConnection"));
+
+            using IServiceScope scope = app.Services.CreateScope();
+
+            IServiceProvider services = scope.ServiceProvider;
+
+            DatabaseSeeder.Run(services, app.Environment.EnvironmentName);
         }
 
-        Migrator.RunUpdate(app.Configuration.GetConnectionString("TestConnection"));
 
         app.MapControllers();
         app.Run();
+    }
+
+    private static void ConfigureMapper(IServiceCollection services, params string[] assemblyNames)
+    {
+        var configuration = new MapperConfiguration(cfg =>
+        {
+            cfg.AddMaps(assemblyNames);
+        });
+
+        configuration.AssertConfigurationIsValid();
+
+        services.AddSingleton(configuration.CreateMapper());
     }
 }
